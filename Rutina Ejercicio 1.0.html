@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Rutinas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold mb-4 text-center">Generador de Rutinas</h2>
+        
+        <label class="block mb-2">Nombre:</label>
+        <input type="text" id="nombreUsuario" class="w-full p-2 border rounded" placeholder="Ingresa tu nombre">
+        
+        <label class="block mt-4 mb-2">Selecciona los grupos musculares:</label>
+        <div id="grupoMuscular" class="grid grid-cols-2 gap-2">
+            <label><input type="checkbox" value="Pecho"> Pecho</label>
+            <label><input type="checkbox" value="Espalda"> Espalda</label>
+            <label><input type="checkbox" value="Piernas"> Piernas</label>
+            <label><input type="checkbox" value="Brazos"> Brazos (bíceps/tríceps)</label>
+            <label><input type="checkbox" value="Hombros"> Hombros</label>
+            <label><input type="checkbox" value="Abdominales"> Abdominales</label>
+            <label><input type="checkbox" value="Cuerpo Completo"> Cuerpo Completo</label>
+        </div>
+        
+        <label class="block mt-4 mb-2">Fecha de inicio:</label>
+        <input type="date" id="fechaInicio" class="w-full p-2 border rounded">
+
+        <label class="block mt-4 mb-2">Fecha de fin:</label>
+        <input type="date" id="fechaFin" class="w-full p-2 border rounded">
+        
+        <label class="block mt-4 mb-2">Días de entrenamiento:</label>
+        <div id="diasEntrenamiento" class="grid grid-cols-2 gap-2">
+            <label><input type="checkbox" value="Lunes"> Lunes</label>
+            <label><input type="checkbox" value="Martes"> Martes</label>
+            <label><input type="checkbox" value="Miércoles"> Miércoles</label>
+            <label><input type="checkbox" value="Jueves"> Jueves</label>
+            <label><input type="checkbox" value="Viernes"> Viernes</label>
+            <label><input type="checkbox" value="Sábado"> Sábado</label>
+            <label><input type="checkbox" value="Domingo"> Domingo</label>
+        </div>
+        
+        <label class="block mt-4 mb-2">Nivel de experiencia:</label>
+        <select id="nivel" class="w-full p-2 border rounded">
+            <option value="Principiante">Principiante</option>
+            <option value="Intermedio">Intermedio</option>
+            <option value="Avanzado">Avanzado</option>
+        </select>
+
+        <button onclick="generarRutina()" class="w-full mt-4 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700">Generar Rutina</button>
+        
+        <div id="resultado" class="mt-6"></div>
+    </div>
+
+    <script>
+        function generarRutina() {
+            const nombre = document.getElementById('nombreUsuario').value;
+            const grupos = Array.from(document.querySelectorAll('#grupoMuscular input:checked')).map(input => input.value);
+            const nivel = document.getElementById('nivel').value;
+            const dias = Array.from(document.querySelectorAll('#diasEntrenamiento input:checked')).map(input => input.value);
+            const ejercicios = {
+                'Pecho': ['Press de banca', 'Aperturas', 'Flexiones'],
+                'Espalda': ['Dominadas', 'Remo con barra', 'Peso muerto'],
+                'Piernas': ['Sentadillas', 'Prensa', 'Zancadas'],
+                'Brazos': ['Curl de bíceps', 'Fondos', 'Extensión de tríceps'],
+                'Hombros': ['Press militar', 'Elevaciones laterales', 'Pájaros'],
+                'Abdominales': ['Crunches', 'Plancha', 'Elevación de piernas'],
+                'Cuerpo Completo': ['Burpees', 'Saltos', 'Mountain climbers']
+            };
+            
+            const niveles = {
+                'Principiante': '3 series de 12 repeticiones',
+                'Intermedio': '4 series de 10 repeticiones',
+                'Avanzado': '5 series de 8 repeticiones'
+            };
+            
+            let rutina = `<h3 class='text-xl font-bold mt-4'>Rutina para ${nombre}:</h3>`;
+            
+            dias.forEach(dia => {
+                rutina += `<h4 class='text-lg font-semibold mt-3'>${dia}:</h4>`;
+                grupos.forEach(grupo => {
+                    if (ejercicios[grupo]) {
+                        rutina += `<h5 class='text-md font-semibold mt-2'>${grupo}:</h5>`;
+                        ejercicios[grupo].forEach(ejercicio => {
+                            rutina += `<p class='mt-2'>🔹 <strong>${ejercicio}</strong> - ${niveles[nivel]}</p>`;
+                        });
+                    }
+                });
+            });
+            
+            document.getElementById('resultado').innerHTML = rutina;
+        }
+    </script>
+</body>
+</html>
